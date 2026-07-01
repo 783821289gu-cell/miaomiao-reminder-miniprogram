@@ -1,0 +1,46 @@
+<view wx:if="{{show}}" class="crop-layer" catchtap="onCancel">
+  <view class="crop-card" catchtap="noop">
+    <view class="sheet-drag-zone">
+      <view class="sheet-handle"></view>
+      <view class="crop-title">框选背景区域</view>
+      <view class="crop-subtitle">拖动图片，选中要当背景的长方形区域</view>
+    </view>
+
+    <view
+      class="crop-frame"
+      style="width: {{frameWidth}}px; height: {{frameHeight}}px;"
+      catchtouchstart="onTouchStart"
+      catchtouchmove="onTouchMove"
+      catchtouchend="onTouchEnd"
+      catchtouchcancel="onTouchEnd"
+    >
+      <image
+        wx:if="{{imagePath}}"
+        class="crop-image"
+        src="{{imagePath}}"
+        mode="scaleToFill"
+        style="width: {{displayWidth}}px; height: {{displayHeight}}px; left: {{imageLeft}}px; top: {{imageTop}}px;"
+      />
+      <view class="crop-grid">
+        <view class="crop-line line-1"></view>
+        <view class="crop-line line-2"></view>
+        <view class="crop-line line-3"></view>
+        <view class="crop-line line-4"></view>
+      </view>
+      <view wx:if="{{!ready}}" class="crop-loading">正在读取图片</view>
+    </view>
+
+    <view class="crop-tools">
+      <button class="tool-btn" bindtap="onZoomOut">缩小</button>
+      <button class="tool-btn" bindtap="onReset">居中</button>
+      <button class="tool-btn" bindtap="onZoomIn">放大</button>
+    </view>
+
+    <view class="crop-actions">
+      <button class="crop-btn ghost" bindtap="onCancel">取消</button>
+      <button class="crop-btn primary" loading="{{busy}}" bindtap="onConfirm">使用选中区域</button>
+    </view>
+
+    <canvas type="2d" id="cropCanvas" class="crop-canvas"></canvas>
+  </view>
+</view>

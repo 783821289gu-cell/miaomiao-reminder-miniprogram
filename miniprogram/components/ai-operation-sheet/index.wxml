@@ -1,0 +1,62 @@
+<view wx:if="{{show}}" class="sheet-layer" bindtap="onClose">
+  <view class="ai-sheet" style="transform: translateY({{dragOffset}}px);" catchtap="noop">
+    <view class="sheet-drag-zone" catchtouchstart="onDragStart" catchtouchmove="onDragMove" catchtouchend="onDragEnd" catchtouchcancel="onDragEnd">
+      <view class="sheet-handle"></view>
+      <view class="sheet-title">AI识别操作</view>
+      <view class="sheet-tip">{{summary}}</view>
+    </view>
+    <scroll-view class="operation-list" scroll-y>
+      <view wx:for="{{operations}}" wx:key="id" class="operation-card">
+        <view class="operation-head">
+          <view class="action-badge {{item.action}}">{{item.actionLabel}}</view>
+          <view class="operation-message">{{item.summaryText}}</view>
+          <view class="delete-op-hit" data-index="{{index}}" catchtap="onDeleteOperation"><view class="delete-op">×</view></view>
+        </view>
+        <view wx:if="{{item.possibleMatch && item.action != 'create'}}" class="possible-tip">可能匹配，请核对目标事件</view>
+        <view class="field-grid">
+          <view wx:if="{{item.action == 'create'}}" class="field wide">
+            <view class="label">事项</view><input class="input" value="{{item.title}}" data-index="{{index}}" data-field="title" bindinput="onInput" />
+          </view>
+          <view wx:if="{{item.action == 'create'}}" class="field">
+            <view class="label">日期</view><input class="input" value="{{item.targetDate}}" data-index="{{index}}" data-field="targetDate" bindinput="onInput" />
+          </view>
+          <view wx:if="{{item.action == 'create'}}" class="field">
+            <view class="label">时间</view><input class="input" value="{{item.targetTime}}" data-index="{{index}}" data-field="targetTime" bindinput="onInput" placeholder="可选" />
+          </view>
+          <view wx:if="{{item.action != 'create'}}" class="field wide">
+            <view class="label">当前选中的事件</view>
+            <view class="event-select" data-index="{{index}}" bindtap="onOpenEventPicker">
+              <view><view class="event-select-title">{{item.targetEventQuery || '请选择事件'}}</view><view class="event-select-date">{{item.targetEventId ? '点击可改选' : '尚未匹配到事件'}}</view></view><view class="event-select-arrow">›</view>
+            </view>
+          </view>
+          <view wx:if="{{item.action == 'update'}}" class="change-block wide">
+            <view class="change-title">AI 已补全的修改</view>
+            <view class="field-grid inner">
+              <view class="field"><view class="label">新名称</view><input class="input" value="{{item.patchTitle}}" data-index="{{index}}" data-field="patchTitle" bindinput="onInput" placeholder="不改则留空" /></view>
+              <view class="field"><view class="label">新日期</view><input class="input" value="{{item.patchDate}}" data-index="{{index}}" data-field="patchDate" bindinput="onInput" placeholder="不改则留空" /></view>
+              <view class="field"><view class="label">新时间</view><input class="input" value="{{item.patchTime}}" data-index="{{index}}" data-field="patchTime" bindinput="onInput" placeholder="不改则留空" /></view>
+            </view>
+          </view>
+          <view wx:if="{{item.action == 'set_reminder'}}" class="field wide">
+            <view class="label">提醒方式</view>
+            <view class="reminder-modes">
+              <view class="reminder-mode {{item.reminderMode == 'auto' ? 'active' : ''}}" data-index="{{index}}" data-mode="auto" bindtap="onReminderModeTap"><text>自动</text><text class="sub">三天前和一天前</text></view>
+              <view class="reminder-mode {{item.reminderMode == 'manual' ? 'active' : ''}}" data-index="{{index}}" data-mode="manual" bindtap="onReminderModeTap"><text>手动</text><text class="sub">精确到分钟</text></view>
+              <view class="reminder-mode {{item.reminderMode == 'off' ? 'active' : ''}}" data-index="{{index}}" data-mode="off" bindtap="onReminderModeTap"><text>关闭</text><text class="sub">取消提醒</text></view>
+            </view>
+            <view wx:if="{{item.reminderMode == 'manual'}}" class="event-select reminder-time" data-index="{{index}}" bindtap="onOpenReminderPicker"><view class="event-select-title">{{item.remindAt || '选择提醒时间'}}</view><view class="event-select-arrow">›</view></view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="sheet-actions"><button class="btn ghost" bindtap="onClose">取消全部</button><button class="btn primary" bindtap="onConfirm">确认全部执行</button></view>
+  </view>
+
+  <view wx:if="{{showEventPicker}}" class="sub-layer" catchtap="onCloseEventPicker">
+    <view class="sub-card" catchtap="noop"><view class="sub-title">选择目标事件</view><scroll-view class="event-options" scroll-y><view wx:for="{{events}}" wx:key="id" class="event-option" data-id="{{item.id}}" bindtap="onSelectEvent"><view class="event-option-title">{{item.title}}</view><view class="event-option-date">{{item.targetDate}} {{item.targetTime}}</view></view></scroll-view><view class="sub-cancel" bindtap="onCloseEventPicker">取消</view></view>
+  </view>
+
+  <view wx:if="{{showReminderPicker}}" class="sub-layer" catchtap="onReminderPickerCancel">
+    <view class="sub-card reminder-picker-card" catchtap="noop"><view class="sub-title">选择提醒时间</view><view class="selected-time">{{selectedReminderAt}}</view><picker-view class="reminder-wheel" value="{{reminderPickerValue}}" indicator-class="wheel-indicator" bindchange="onReminderPickerChange"><picker-view-column><view wx:for="{{reminderYears}}" wx:key="*this" class="wheel-item">{{item}}年</view></picker-view-column><picker-view-column><view wx:for="{{reminderMonths}}" wx:key="*this" class="wheel-item">{{item}}月</view></picker-view-column><picker-view-column><view wx:for="{{reminderDays}}" wx:key="*this" class="wheel-item">{{item}}日</view></picker-view-column><picker-view-column><view wx:for="{{reminderHours}}" wx:key="*this" class="wheel-item">{{item < 10 ? '0' + item : item}}时</view></picker-view-column><picker-view-column><view wx:for="{{reminderMinutes}}" wx:key="*this" class="wheel-item">{{item < 10 ? '0' + item : item}}分</view></picker-view-column></picker-view><view class="sub-actions"><view class="sub-action ghost" bindtap="onReminderPickerCancel">取消</view><view class="sub-action primary" bindtap="onReminderPickerConfirm">确定</view></view></view>
+  </view>
+</view>

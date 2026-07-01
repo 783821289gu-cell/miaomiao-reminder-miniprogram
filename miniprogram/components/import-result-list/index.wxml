@@ -1,0 +1,51 @@
+<view wx:if="{{show}}" class="result-layer" bindtap="onClose">
+  <view class="result-card" style="transform: translateY({{dragOffset}}px);" catchtap="noop">
+    <view class="sheet-drag-zone" catchtouchstart="onDragStart" catchtouchmove="onDragMove" catchtouchend="onDragEnd" catchtouchcancel="onDragEnd">
+      <view class="sheet-handle"></view>
+      <view class="result-title">确认导入事项</view>
+    </view>
+    <scroll-view class="candidate-list" scroll-y>
+      <view wx:for="{{localCandidates}}" wx:key="id" class="candidate {{item.canSave ? '' : 'disabled'}}">
+        <view class="candidate-head">
+          <view class="check {{item.selected ? 'checked' : ''}} {{item.canSave ? '' : 'locked'}}" data-index="{{index}}" bindtap="onToggle">{{item.canSave ? (item.selected ? '✓' : '') : '!'}}</view>
+          <view class="raw">{{item.rawText}}</view>
+          <button class="delete-row" data-index="{{index}}" catchtap="onDelete">×</button>
+        </view>
+        <view class="candidate-grid">
+          <input class="input title-input" value="{{item.title}}" data-index="{{index}}" data-field="title" bindinput="onInput" placeholder="事项" />
+          <view class="input date-input {{item.targetDate ? '' : 'placeholder'}}" data-index="{{index}}" bindtap="onOpenDatePicker">
+            <text>{{item.targetDate || '选择日期'}}</text>
+            <image class="date-input-icon" src="/assets/original/icon_calendar.png" mode="aspectFit" />
+          </view>
+          <input class="input" value="{{item.targetTime}}" data-index="{{index}}" data-field="targetTime" bindinput="onInput" bindblur="onBlur" placeholder="时间可选" />
+        </view>
+        <view wx:if="{{item.missingText}}" class="missing">{{item.canSave ? '需补充：' : ''}}{{item.missingText}}</view>
+      </view>
+    </scroll-view>
+    <view class="actions">
+      <button class="btn ghost" bindtap="onClose">取消</button>
+      <button class="btn primary" bindtap="onConfirm">生成选中事项</button>
+    </view>
+  </view>
+  <view wx:if="{{showDatePicker}}" class="date-layer" catchtap="onDatePickerCancel">
+    <view class="date-card" catchtap="noop">
+      <view class="date-title">选择日期</view>
+      <view class="date-subtitle">{{selectedDateLabel}}</view>
+      <picker-view class="date-wheel" value="{{datePickerValue}}" indicator-class="date-indicator" bindchange="onDatePickerChange">
+        <picker-view-column>
+          <view wx:for="{{dateYears}}" wx:key="*this" class="date-item">{{item}}年</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view wx:for="{{dateMonths}}" wx:key="*this" class="date-item">{{item}}月</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view wx:for="{{dateDays}}" wx:key="*this" class="date-item">{{item}}日</view>
+        </picker-view-column>
+      </picker-view>
+      <view class="date-actions">
+        <button class="date-btn ghost" bindtap="onDatePickerCancel">取消</button>
+        <button class="date-btn primary" bindtap="onDatePickerConfirm">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

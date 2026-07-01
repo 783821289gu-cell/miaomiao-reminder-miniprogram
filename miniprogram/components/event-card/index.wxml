@@ -1,0 +1,29 @@
+<view class="swipe-shell {{opened ? 'opened' : ''}} {{dragging ? 'dragging' : ''}}" style="position: relative; width: 100%; margin-bottom: 16rpx; overflow: visible; border-radius: 28rpx;">
+  <view class="delete-action" catchtap="onDeleteTap" aria-role="button" aria-label="删除事件" style="width: {{deleteButtonWidth}}px; opacity: {{opened || dragging ? 1 : 0}}; transform: translateX({{opened || dragging ? 0 : 12}}rpx) scale({{opened || dragging ? 1 : 0.98}});">
+    <image class="delete-icon" src="/assets/original/icon_delete.png" mode="aspectFit" style="width: 38rpx; height: 38rpx; display: block;" />
+    <text class="delete-label" style="margin-top: 8rpx; display: block; font-size: 23rpx; font-weight: 900; line-height: 1; color: #fffdf8;">删除</text>
+  </view>
+  <view class="event-card {{event.status}} {{event.isPinned ? 'pinned' : ''}} {{event.draggingPinned ? 'pin-dragging' : ''}}" style="transform: translateX({{offsetX}}px) translateY({{event.dragOffsetY || 0}}px) scale({{event.draggingPinned ? 1.015 : 1}}); position: relative; z-index: {{event.draggingPinned ? 6 : 2}}; width: 100%; min-height: 138rpx; padding: 20rpx 24rpx; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; overflow: hidden; border-radius: 28rpx; border: 4rpx solid {{event.isPinned ? 'rgba(255, 179, 64, 0.82)' : (event.status == 'today' ? 'rgba(235, 95, 145, 0.5)' : 'rgba(70, 63, 58, 0.24)')}}; box-shadow: {{event.draggingPinned ? '0 18rpx 36rpx rgba(70, 63, 58, 0.18)' : (event.isPinned ? '0 12rpx 26rpx rgba(255, 179, 64, 0.18)' : '0 8rpx 20rpx rgba(70, 63, 58, 0.08)')}}; transition: {{event.draggingPinned ? 'box-shadow 120ms ease' : 'transform 180ms ease, box-shadow 180ms ease'}}; {{event.cardStyle}}" bindtap="onTap" bindlongpress="onLongPress" bindtouchstart="onTouchStart" bindtouchmove="onTouchMove" bindtouchend="onTouchEnd" bindtouchcancel="onTouchEnd">
+    <image wx:if="{{event.cardImage}}" class="card-bg-image" src="{{event.cardImage}}" mode="aspectFill" />
+    <view class="card-left" style="min-width: 0; flex: 1;">
+      <view class="title-row" style="display: flex; align-items: center; min-width: 0;">
+        <view wx:if="{{event.pinnedText}}" class="pin-pill" style="flex: none; margin-right: 10rpx; padding: 6rpx 14rpx; font-size: 20rpx; font-weight: 900; color: #8b5a16; background: #fff0be; border: 2rpx solid rgba(139, 90, 22, 0.22); border-radius: 999rpx;">{{event.pinnedText}}</view>
+        <view wx:if="{{event.reminderBadgeText}}" class="reminder-pill">{{event.reminderBadgeText}}</view>
+        <view class="event-title" style="min-width: 0; max-width: 100%; overflow: hidden; font-size: 32rpx; font-weight: 900; line-height: 1.25; color: #463f3a; text-overflow: ellipsis; white-space: nowrap;">{{event.title}}</view>
+      </view>
+      <view class="event-date" style="margin-top: 8rpx; overflow: hidden; font-size: 24rpx; font-weight: 800; color: #82756c; text-overflow: ellipsis; white-space: nowrap;">{{event.displayDate}}</view>
+      <view class="status-pill {{event.status}}" style="display: inline-flex; min-width: 78rpx; margin-top: 16rpx; padding: 7rpx 16rpx; justify-content: center; font-size: 22rpx; font-weight: 900; color: #fff; background: {{event.status == 'today' ? '#eb5f91' : (event.status == 'past' ? '#b9aaa0' : '#2fc8a7')}}; border-radius: 999rpx;">{{event.statusText}}</view>
+    </view>
+
+    <view class="card-right" style="flex: none; min-width: 132rpx; margin-left: 20rpx; text-align: right;">
+      <block wx:if="{{event.showDayCount}}">
+        <view class="count-wrap" style="display: flex; align-items: baseline; justify-content: flex-end;">
+          <text class="count-number" style="font-family: DIN Alternate, PingFang SC, sans-serif; font-size: 66rpx; font-weight: 900; line-height: 1; color: #5a3b25;">{{event.absDays}}</text>
+          <text class="count-unit" style="margin-left: 8rpx; font-size: 24rpx; font-weight: 900; color: #5a3b25;">天</text>
+        </view>
+      </block>
+      <text wx:else class="count-today" style="display: inline-flex; padding: 10rpx 24rpx; font-size: 32rpx; font-weight: 900; color: #eb5f91; background: rgba(255, 253, 248, 0.82); border: 2rpx solid rgba(235, 95, 145, 0.22); border-radius: 999rpx;">{{event.centerText}}</text>
+      <view class="meta-text" style="margin-top: 12rpx; overflow: hidden; font-size: 24rpx; font-weight: 900; color: #82756c; text-overflow: ellipsis; white-space: nowrap;">{{event.displayMeta}}</view>
+    </view>
+  </view>
+</view>

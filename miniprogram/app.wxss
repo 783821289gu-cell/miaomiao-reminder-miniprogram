@@ -1,0 +1,52 @@
+page {
+  min-height: 100%;
+  color: #463f3a;
+  background: #f9dd8b;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+view,
+text,
+input,
+textarea,
+button,
+picker,
+picker-view {
+  box-sizing: border-box;
+}
+
+button {
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: normal;
+  color: inherit;
+  background: transparent;
+  background-color: transparent;
+  border-radius: 0;
+  overflow: visible;
+  font-size: inherit;
+}
+
+button::after {
+  border: none;
+}
+
+input,
+textarea {
+  color: #463f3a;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}

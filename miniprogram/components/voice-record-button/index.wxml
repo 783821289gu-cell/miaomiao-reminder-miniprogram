@@ -1,0 +1,15 @@
+<view class="voice-wrap">
+  <view class="voice-btn {{pressing ? 'pressing' : ''}}" catchtouchstart="onTouchStart" catchtouchmove="onTouchMove" catchtouchend="onTouchEnd" catchtouchcancel="onTouchCancel" aria-role="button" aria-label="长按说话">
+    <image class="voice-icon" src="/assets/original/icon_voice_mic.png" mode="aspectFit" />
+    <text class="voice-label">{{canceling ? '松手取消' : (recording ? '松开识别' : '长按说话')}}</text>
+  </view>
+  <view wx:if="{{recording}}" class="record-panel">
+    <view class="wave">
+      <view class="wave-bar bar-1"></view>
+      <view class="wave-bar bar-2"></view>
+      <view class="wave-bar bar-3"></view>
+      <view class="wave-bar bar-4"></view>
+    </view>
+    <text>{{canceling ? '松手取消' : '正在听你说...'}}</text>
+  </view>
+</view>

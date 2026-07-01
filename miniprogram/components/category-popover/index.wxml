@@ -1,0 +1,18 @@
+<view wx:if="{{show}}" class="category-layer" bindtap="onClose">
+  <view class="category-card" catchtap="noop">
+    <view class="category-title">分类</view>
+    <view class="category-grid">
+      <view wx:for="{{categories}}" wx:key="id" class="category-item {{selectedId == item.id ? 'active' : ''}}" data-id="{{item.id}}" bindtap="onSelect">
+        <view wx:if="{{!item.isSystem}}" class="category-delete-hit" data-id="{{item.id}}" catchtap="onDelete" aria-label="删除分类">
+          <view class="category-delete">×</view>
+        </view>
+        <image class="category-icon" src="{{item.icon || '/assets/original/icon_tab_life.png'}}" mode="aspectFit" />
+        <text>{{item.name}}</text>
+      </view>
+      <view class="category-item add" bindtap="onAdd">
+        <view class="add-mark">＋</view>
+        <text>新增</text>
+      </view>
+    </view>
+  </view>
+</view>

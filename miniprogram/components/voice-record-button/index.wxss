@@ -1,0 +1,91 @@
+.voice-wrap {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.voice-btn {
+  width: 100%;
+  height: 74rpx;
+  padding: 0 14rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-size: 23rpx;
+  font-weight: 800;
+  background: #fffdf8;
+  border: 3rpx solid rgba(70, 63, 58, 0.16);
+  border-radius: 999rpx;
+  box-shadow: 0 10rpx 24rpx rgba(70, 63, 58, 0.12);
+  transition: transform 160ms ease;
+}
+
+.voice-btn.pressing {
+  transform: scale(1.04);
+}
+
+.voice-icon {
+  flex: none;
+  width: 34rpx;
+  height: 34rpx;
+}
+
+.voice-label {
+  pointer-events: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-panel {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 120;
+  width: 320rpx;
+  padding: 28rpx 24rpx;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 24rpx;
+  color: #463f3a;
+  background: rgba(255, 253, 248, 0.94);
+  border: 2rpx solid rgba(70, 63, 58, 0.14);
+  border-radius: 24rpx;
+  box-shadow: 0 14rpx 34rpx rgba(70, 63, 58, 0.18);
+}
+
+.wave {
+  height: 48rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.wave-bar {
+  width: 8rpx;
+  height: 22rpx;
+  background: #eb5f91;
+  border-radius: 999rpx;
+  animation: wave 820ms ease-in-out infinite;
+}
+
+.wave-bar.bar-2 {
+  animation-delay: 120ms;
+}
+
+.wave-bar.bar-3 {
+  animation-delay: 240ms;
+}
+
+.wave-bar.bar-4 {
+  animation-delay: 360ms;
+}
+
+@keyframes wave {
+  0%, 100% { height: 18rpx; }
+  50% { height: 44rpx; }
+}

@@ -1,0 +1,106 @@
+@import "../../styles/background-templates.wxss";
+
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 28rpx 50rpx;
+  background: rgba(42, 35, 28, 0.45);
+}
+
+.bg-card {
+  width: 100%;
+  padding: 26rpx;
+  background: #fffdf8;
+  border: 3rpx solid rgba(70, 63, 58, 0.16);
+  border-radius: 28rpx;
+  box-shadow: 0 18rpx 46rpx rgba(70, 63, 58, 0.18);
+}
+
+.bg-title {
+  margin-bottom: 18rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.bg-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+}
+
+.bg-item {
+  position: relative;
+  padding: 12rpx;
+  font-size: 22rpx;
+  font-weight: 800;
+  color: #463f3a;
+  text-align: center;
+  border: 2rpx solid transparent;
+  border-radius: 20rpx;
+}
+
+.bg-item.active {
+  background: #fff4dc;
+  border-color: #463f3a;
+}
+
+.bg-item.import {
+  border-color: rgba(70, 63, 58, 0.12);
+}
+
+.bg-delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  width: 42rpx;
+  height: 42rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 900;
+  line-height: 1;
+  color: #82756c;
+  background: #fff4dc;
+  border: 3rpx solid rgba(70, 63, 58, 0.14);
+  border-radius: 50%;
+  box-shadow: 0 8rpx 18rpx rgba(70, 63, 58, 0.12);
+}
+
+.bg-preview {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 110rpx;
+  margin-bottom: 10rpx;
+  background-color: #ffe29b;
+  background-size: 160rpx 160rpx;
+  border: 2rpx solid rgba(70, 63, 58, 0.12);
+  border-radius: 16rpx;
+}
+
+.import-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42rpx;
+  font-weight: 900;
+  color: #82756c;
+  background: #fff4dc;
+}
+
+.bg-limit-tip {
+  margin-top: 18rpx;
+  padding: 12rpx 16rpx;
+  font-size: 22rpx;
+  font-weight: 800;
+  text-align: center;
+  color: #82756c;
+  background: #fffaf0;
+  border: 2rpx solid rgba(70, 63, 58, 0.1);
+  border-radius: 999rpx;
+}

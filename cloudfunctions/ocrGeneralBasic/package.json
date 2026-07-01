@@ -1,0 +1,9 @@
+{
+  "name": "ocrGeneralBasic",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "tencentcloud-sdk-nodejs": "latest",
+    "wx-server-sdk": "latest"
+  }
+}

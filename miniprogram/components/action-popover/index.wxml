@@ -1,0 +1,20 @@
+<view wx:if="{{show}}" class="action-layer" bindtap="onClose">
+  <view class="action-card" catchtap="noop">
+    <button class="action-item" bindtap="onEdit">
+      <image class="action-icon" src="/assets/original/icon_settings.png" mode="aspectFit" />
+      <text>编辑</text>
+    </button>
+    <button class="action-item" bindtap="onBackground">
+      <image class="action-icon" src="/assets/original/icon_paint.png" mode="aspectFit" />
+      <text>更换背景</text>
+    </button>
+    <button class="action-item share" open-type="share" data-event-id="{{event.id}}">
+      <image class="action-icon" src="/assets/original/icon_share.png" mode="aspectFit" />
+      <text>分享</text>
+    </button>
+    <button class="action-item danger" bindtap="onDelete">
+      <image class="action-icon" src="/assets/original/icon_delete.png" mode="aspectFit" />
+      <text>删除</text>
+    </button>
+  </view>
+</view>

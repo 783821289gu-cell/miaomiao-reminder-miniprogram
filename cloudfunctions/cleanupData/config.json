@@ -1,0 +1,9 @@
+{
+  "triggers": [
+    {
+      "name": "cleanupDataDaily",
+      "type": "timer",
+      "config": "0 15 3 * * * *"
+    }
+  ]
+}

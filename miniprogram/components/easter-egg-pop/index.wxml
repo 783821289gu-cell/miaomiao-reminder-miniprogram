@@ -1,0 +1,26 @@
+<view wx:if="{{show}}" class="egg-layer">
+  <view class="egg-cat">
+    <view class="heart">
+      <view class="heart-round left"></view>
+      <view class="heart-round right"></view>
+    </view>
+    <view class="tail"></view>
+    <view class="head">
+      <view class="ear left"></view>
+      <view class="ear right"></view>
+      <view class="eye left"></view>
+      <view class="eye right"></view>
+      <view class="cheek left"></view>
+      <view class="cheek right"></view>
+      <view class="nose"></view>
+      <view class="mouth left"></view>
+      <view class="mouth right"></view>
+      <view class="whisker left one"></view>
+      <view class="whisker left two"></view>
+      <view class="whisker right one"></view>
+      <view class="whisker right two"></view>
+    </view>
+    <view class="paw left"><text>||</text></view>
+    <view class="paw right"><text>||</text></view>
+  </view>
+</view>

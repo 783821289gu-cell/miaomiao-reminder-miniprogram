@@ -1,0 +1,7 @@
+<view wx:if="{{show}}" class="bottom-tip">
+  <text class="tip-text">点猫爪添加，长按语音快速记事</text>
+  <view class="tip-actions">
+    <button class="tip-action" bindtap="onClose">关闭</button>
+    <button class="tip-action" bindtap="onNever">不再显示</button>
+  </view>
+</view>

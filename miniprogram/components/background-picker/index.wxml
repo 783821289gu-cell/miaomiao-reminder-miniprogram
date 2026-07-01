@@ -1,0 +1,17 @@
+<view wx:if="{{show}}" class="bg-layer" bindtap="onClose">
+  <view class="bg-card" catchtap="noop">
+    <view class="bg-title">更换背景</view>
+    <view class="bg-grid">
+      <view wx:for="{{backgrounds}}" wx:key="id" class="bg-item {{selectedId == item.id ? 'active' : ''}}" data-id="{{item.id}}" bindtap="onSelect">
+        <view wx:if="{{item.isCustom}}" class="bg-delete" data-id="{{item.id}}" catchtap="onDelete">×</view>
+        <image class="bg-preview" src="{{mode == 'event' ? item.cardPreview : item.pagePreview}}" mode="aspectFill" />
+        <text>{{item.displayName}}</text>
+      </view>
+      <view wx:if="{{customCount < customLimit}}" class="bg-item import" bindtap="onImport">
+        <view class="bg-preview import-preview">＋</view>
+        <text>导入图片</text>
+      </view>
+    </view>
+    <view class="bg-limit-tip">{{customCount >= customLimit ? '自定义背景已满，删除旧背景后可继续导入' : '自定义背景最多 ' + customLimit + ' 张'}}</view>
+  </view>
+</view>

@@ -1,0 +1,147 @@
+<view wx:if="{{show}}" class="modal-layer" bindtap="onCancel">
+  <view class="modal-card" catchtap="noop">
+    <view class="modal-title">{{localForm.id ? '编辑事件' : '添加事件'}}</view>
+
+    <view class="field">
+      <view class="field-label">名称</view>
+      <input class="text-input" value="{{localForm.title}}" maxlength="24" placeholder="比如 朋友生日" bindinput="onTitleInput" />
+    </view>
+
+    <view class="field">
+      <view class="field-label">日期</view>
+      <view class="date-row" bindtap="onOpenDate" aria-role="button" aria-label="打开日期选择器">
+        <text class="{{localForm.targetDate ? 'date-text' : 'date-placeholder'}}">{{localForm.targetDate || '请选择日期'}}</text>
+        <image class="date-icon" src="/assets/original/icon_calendar.png" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="field-label">时间</view>
+      <input class="text-input" value="{{localForm.targetTime}}" placeholder="可选，例如 08:00" maxlength="12" bindinput="onTimeInput" bindblur="onTimeBlur" />
+    </view>
+
+    <view class="field">
+      <view class="field-label">分类</view>
+      <view class="chip-row">
+        <view wx:for="{{editableCategories}}" wx:key="id" class="chip {{localForm.categoryId == item.id ? 'active' : ''}}" data-id="{{item.id}}" bindtap="onCategoryTap">
+          {{item.name}}
+        </view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="field-label">背景</view>
+      <view class="bg-row">
+        <image wx:for="{{backgrounds}}" wx:key="id" class="bg-dot {{localForm.backgroundId == item.id ? 'selected' : ''}}" src="{{item.cardPreview}}" mode="aspectFill" data-id="{{item.id}}" bindtap="onBackgroundTap" />
+      </view>
+    </view>
+
+    <view class="option-row" bindtap="onTogglePinned">
+      <view>
+        <view class="option-title">置顶事件</view>
+        <view class="option-subtitle">置顶后优先显示，可长按拖动排序</view>
+      </view>
+      <view class="switch {{localForm.isPinned ? 'on' : ''}}">
+        <view class="switch-dot"></view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="field-label">提醒</view>
+      <view wx:if="{{(hasExistingReminder || hasTriggeredReminder) && !reminderEditMode}}" class="reminder-summary-card {{hasTriggeredReminder ? 'triggered' : ''}}">
+        <view class="reminder-summary-copy">
+          <view class="reminder-summary-title">{{hasTriggeredReminder ? '提醒已触发' : '已设置提醒'}}</view>
+          <view class="reminder-summary-time">{{reminderSummary}}</view>
+          <view class="reminder-summary-note">{{hasTriggeredReminder ? '可以重新设置新的提醒时间' : '保存其他修改不会改变提醒'}}</view>
+        </view>
+        <view class="reminder-edit-button" bindtap="onEditReminder" aria-role="button" aria-label="{{hasTriggeredReminder ? '重新设置提醒' : '修改提醒'}}">{{hasTriggeredReminder ? '重新设置' : '修改'}}</view>
+      </view>
+      <block wx:if="{{reminderEditMode}}">
+        <view wx:if="{{subscriptionState == 'off'}}" class="reminder-warning">微信提醒当前已关闭，开启提醒时会引导你重新授权</view>
+        <view wx:if="{{reminderError}}" class="reminder-error">{{reminderError}}</view>
+        <view class="reminder-mode-row">
+        <view class="reminder-mode {{localForm.reminderMode == 'auto' ? 'active' : ''}}" data-mode="auto" bindtap="onReminderModeTap">
+          <view class="reminder-mode-title">自动</view>
+          <view class="reminder-mode-sub">前一天09:00</view>
+        </view>
+        <view class="reminder-mode {{localForm.reminderMode == 'manual' ? 'active' : ''}}" data-mode="manual" bindtap="onReminderModeTap">
+          <view class="reminder-mode-title">手动</view>
+          <view class="reminder-mode-sub">自己选时间</view>
+        </view>
+        <view class="reminder-mode {{localForm.reminderMode == 'off' ? 'active' : ''}}" data-mode="off" bindtap="onReminderModeTap">
+          <view class="reminder-mode-title">不提醒</view>
+          <view class="reminder-mode-sub">只保存事件</view>
+        </view>
+        </view>
+        <view wx:if="{{localForm.reminderMode != 'off'}}" class="reminder-setting-note">消息横幅由微信中的“接收并提醒”设置决定</view>
+      </block>
+    </view>
+
+    <view wx:if="{{reminderEditMode && localForm.reminderMode == 'manual'}}" class="field">
+      <view class="field-label">手动提醒时间</view>
+      <view class="date-row reminder-time-row" bindtap="onOpenReminderPicker" aria-role="button" aria-label="打开提醒时间选择器">
+        <text class="{{localForm.reminder.remindAt ? 'date-text' : 'date-placeholder'}}">{{localForm.reminder.remindAt || '请选择提醒时间'}}</text>
+        <image class="date-icon" src="/assets/original/icon_calendar.png" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="modal-actions">
+      <button class="btn ghost" bindtap="onCancel">取消</button>
+      <button class="btn primary {{saving ? 'disabled' : ''}}" bindtap="onConfirm">{{saving ? '保存中...' : '确定'}}</button>
+    </view>
+  </view>
+
+  <view wx:if="{{showDatePicker}}" class="date-layer" catchtap="onDateCancel">
+    <view class="date-card" catchtap="noop">
+      <view class="date-title">选择日期</view>
+      <view class="date-subtitle">{{selectedDateLabel}}</view>
+      <view class="date-wheel-wrap">
+        <picker-view class="date-wheel" value="{{datePickerValue}}" indicator-class="date-indicator" bindchange="onDatePickerChange">
+          <picker-view-column>
+            <view wx:for="{{dateYears}}" wx:key="*this" class="date-item">{{item}}年</view>
+          </picker-view-column>
+          <picker-view-column>
+            <view wx:for="{{dateMonths}}" wx:key="*this" class="date-item">{{item}}月</view>
+          </picker-view-column>
+          <picker-view-column>
+            <view wx:for="{{dateDays}}" wx:key="*this" class="date-item">{{item}}日</view>
+          </picker-view-column>
+        </picker-view>
+      </view>
+      <view class="date-actions">
+        <button class="date-btn ghost" bindtap="onDateCancel">取消</button>
+        <button class="date-btn primary" bindtap="onDateConfirm">确定</button>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{showReminderPicker}}" class="date-layer" catchtap="onReminderPickerCancel">
+    <view class="date-card reminder-date-card" catchtap="noop">
+      <view class="date-title">选择提醒时间</view>
+      <view class="date-subtitle">{{selectedReminderLabel}}</view>
+      <view class="date-wheel-wrap reminder-wheel-wrap">
+        <picker-view class="date-wheel reminder-wheel" value="{{reminderPickerValue}}" indicator-class="date-indicator" bindchange="onReminderPickerChange">
+          <picker-view-column>
+            <view wx:for="{{reminderYears}}" wx:key="*this" class="date-item reminder-item">{{item}}年</view>
+          </picker-view-column>
+          <picker-view-column>
+            <view wx:for="{{reminderMonths}}" wx:key="*this" class="date-item reminder-item">{{item}}月</view>
+          </picker-view-column>
+          <picker-view-column>
+            <view wx:for="{{reminderDays}}" wx:key="*this" class="date-item reminder-item">{{item}}日</view>
+          </picker-view-column>
+          <picker-view-column>
+            <view wx:for="{{reminderHours}}" wx:key="*this" class="date-item reminder-item">{{item < 10 ? '0' + item : item}}时</view>
+          </picker-view-column>
+          <picker-view-column>
+            <view wx:for="{{reminderMinutes}}" wx:key="*this" class="date-item reminder-item">{{item < 10 ? '0' + item : item}}分</view>
+          </picker-view-column>
+        </picker-view>
+      </view>
+      <view class="date-actions">
+        <button class="date-btn ghost" bindtap="onReminderPickerCancel">取消</button>
+        <button class="date-btn primary" bindtap="onReminderPickerConfirm">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

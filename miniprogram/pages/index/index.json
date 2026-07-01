@@ -1,0 +1,20 @@
+{
+  "navigationBarTitleText": "重要日",
+  "usingComponents": {
+    "event-card": "../../components/event-card/index",
+    "add-event-modal": "../../components/add-event-modal/index",
+    "category-popover": "../../components/category-popover/index",
+    "category-create-dialog": "../../components/category-create-dialog/index",
+    "action-popover": "../../components/action-popover/index",
+    "background-picker": "../../components/background-picker/index",
+    "background-cropper": "../../components/background-cropper/index",
+    "voice-record-button": "../../components/voice-record-button/index",
+    "voice-result-sheet": "../../components/voice-result-sheet/index",
+    "image-text-import-sheet": "../../components/image-text-import-sheet/index",
+    "import-result-list": "../../components/import-result-list/index",
+    "ai-operation-sheet": "../../components/ai-operation-sheet/index",
+    "easter-egg-pop": "../../components/easter-egg-pop/index",
+    "confirm-dialog": "../../components/confirm-dialog/index",
+    "bottom-tip": "../../components/bottom-tip/index"
+  }
+}

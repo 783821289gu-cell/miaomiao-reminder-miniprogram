@@ -1,0 +1,17 @@
+module.exports = {
+  endpoint: "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
+  model: "paraformer-realtime-v2",
+  format: "pcm",
+  sampleRate: 16000,
+  numberOfChannels: 1,
+  audioChunkBytes: 3200,
+  languageHints: ["zh"],
+  disfluencyRemovalEnabled: false,
+  semanticPunctuationEnabled: false,
+  maxSentenceSilence: 800,
+  multiThresholdModeEnabled: true,
+  punctuationPredictionEnabled: true,
+  inverseTextNormalizationEnabled: true,
+  timeoutMs: 70000,
+  debugTiming: true,
+};

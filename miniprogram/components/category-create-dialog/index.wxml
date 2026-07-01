@@ -1,0 +1,17 @@
+<view wx:if="{{show}}" class="dialog-layer" bindtap="onClose">
+  <view class="dialog-card" catchtap="noop">
+    <view class="dialog-title">新增分类</view>
+    <view class="dialog-subtitle">最多 6 个字，保存后可用于筛选和标记事项</view>
+    <input class="name-input" value="{{name}}" maxlength="6" focus="{{show}}" placeholder="例如 学习" bindinput="onInput" />
+    <view class="icon-label">选择图标</view>
+    <view class="icon-grid">
+      <view wx:for="{{iconOptions}}" wx:key="*this" class="icon-option {{selectedIcon == item ? 'active' : ''}}" data-icon="{{item}}" bindtap="onIconSelect">
+        <image class="icon-image" src="{{item}}" mode="aspectFit" />
+      </view>
+    </view>
+    <view class="dialog-actions">
+      <button class="btn ghost" bindtap="onClose">取消</button>
+      <button class="btn primary" bindtap="onConfirm">确定</button>
+    </view>
+  </view>
+</view>

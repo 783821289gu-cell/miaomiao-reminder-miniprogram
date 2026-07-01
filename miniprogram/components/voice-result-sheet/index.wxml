@@ -1,0 +1,39 @@
+<view wx:if="{{show}}" class="sheet-layer" bindtap="onClose">
+  <view class="voice-sheet" style="transform: translateY({{dragOffset}}px);" catchtap="noop">
+    <view class="sheet-drag-zone" catchtouchstart="onDragStart" catchtouchmove="onDragMove" catchtouchend="onDragEnd" catchtouchcancel="onDragEnd">
+      <view class="sheet-handle"></view>
+      <view class="sheet-title">语音识别生成记录</view>
+      <view class="sheet-tip">确认后会新增一条记录</view>
+    </view>
+
+    <view class="field">
+      <view class="label">识别文本</view>
+      <textarea class="raw-text" value="{{localRawText}}" maxlength="200" bindinput="onRawInput" />
+      <button class="small-btn" bindtap="onReparse">重新解析</button>
+    </view>
+
+    <view class="field-grid">
+      <view class="field">
+        <view class="label">事项</view>
+        <input class="input" value="{{localCandidate.title}}" data-field="title" bindinput="onFieldInput" />
+      </view>
+      <view class="field">
+        <view class="label">日期</view>
+        <input class="input" value="{{localCandidate.targetDate}}" data-field="targetDate" bindinput="onFieldInput" />
+      </view>
+      <view class="field">
+        <view class="label">时间</view>
+        <input class="input" value="{{localCandidate.targetTime}}" data-field="targetTime" bindinput="onFieldInput" bindblur="onFieldBlur" placeholder="可选" />
+      </view>
+      <view class="field">
+        <view class="label">地点</view>
+        <input class="input" value="{{localCandidate.location}}" data-field="location" bindinput="onFieldInput" placeholder="可选" />
+      </view>
+    </view>
+
+    <view class="sheet-actions">
+      <button class="btn ghost" bindtap="onClose">取消</button>
+      <button class="btn primary" bindtap="onGenerate">生成记录</button>
+    </view>
+  </view>
+</view>

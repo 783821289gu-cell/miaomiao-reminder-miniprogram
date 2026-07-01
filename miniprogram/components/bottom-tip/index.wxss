@@ -1,0 +1,45 @@
+.bottom-tip {
+  position: fixed;
+  left: 28rpx;
+  right: 28rpx;
+  bottom: calc(env(safe-area-inset-bottom) + 214rpx);
+  z-index: 17;
+  min-height: 86rpx;
+  padding: 16rpx 18rpx 16rpx 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14rpx;
+  font-size: 23rpx;
+  color: #5e544d;
+  background: rgba(255, 253, 248, 0.94);
+  border: 2rpx solid rgba(70, 63, 58, 0.12);
+  border-radius: 22rpx;
+  box-shadow: 0 10rpx 28rpx rgba(70, 63, 58, 0.12);
+}
+
+.tip-text {
+  min-width: 0;
+  flex: 1;
+  line-height: 1.35;
+  word-break: normal;
+}
+
+.tip-actions {
+  flex: none;
+  display: grid;
+  grid-template-columns: 116rpx 150rpx;
+  gap: 10rpx;
+}
+
+.tip-action {
+  width: 100%;
+  min-width: 0;
+  height: 50rpx;
+  padding: 0;
+  font-size: 23rpx;
+  font-weight: 800;
+  color: #82756c;
+  background: #fff4dc;
+  border-radius: 999rpx;
+}

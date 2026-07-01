@@ -1,0 +1,16 @@
+.page {
+  min-height: 100vh;
+  padding: 120rpx 34rpx 40rpx;
+  background: #f9dd8b;
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 900;
+}
+
+.text {
+  margin-top: 24rpx;
+  font-size: 28rpx;
+  color: #5e544d;
+}

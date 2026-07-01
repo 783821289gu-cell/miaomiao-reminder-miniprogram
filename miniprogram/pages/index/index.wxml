@@ -1,0 +1,150 @@
+<view class="page bg-template-{{pageBackgroundId}}" style="{{pageBackgroundStyle}}">
+  <image wx:if="{{pageBackgroundImage}}" class="page-bg-image" src="{{pageBackgroundImage}}" mode="aspectFill" />
+  <view class="custom-nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="brand">
+      <image class="brand-cat" src="/assets/original/icon_256_transparent.png" mode="aspectFit" />
+      <view>
+        <view class="brand-subtitle">重要日和小事都记住</view>
+        <view wx:if="{{syncText}}" class="sync-text">{{syncText}}</view>
+      </view>
+    </view>
+    <view class="nav-actions">
+      <button class="tool-pill" bindtap="onOpenThemePicker" aria-role="button" aria-label="切换主题背景">
+        <image src="/assets/original/icon_paint.png" mode="aspectFit" />
+        <text>背景</text>
+      </button>
+      <button class="category-pill" bindtap="onOpenCategory">{{selectedCategoryName}}</button>
+    </view>
+  </view>
+
+  <scroll-view class="content" scroll-y enhanced show-scrollbar="{{false}}">
+    <view wx:if="{{!displayEvents.length}}" class="empty" bindtap="onOpenAdd">
+      <image class="empty-cat" src="/assets/original/icon_256_transparent.png" mode="aspectFit" />
+      <view class="empty-title">还没有记录</view>
+      <view class="empty-text">点猫爪添加第一个重要日</view>
+      <button class="empty-btn">添加事件</button>
+    </view>
+
+    <view wx:else class="event-list">
+      <event-card wx:for="{{displayEvents}}" wx:key="id" event="{{item}}" index="{{index}}" bind:tapcard="onCardTap" bind:deletecard="onCardDelete" bind:pindragstart="onPinnedDragStart" bind:pindragmove="onPinnedDragMove" bind:pindragend="onPinnedDragEnd" />
+      <view class="scroll-bottom-spacer"></view>
+    </view>
+  </scroll-view>
+
+  <view class="top-quick-row">
+    <button class="float-paw" bindtap="onOpenAdd" aria-role="button" aria-label="添加事件">
+      <image src="/assets/original/icon_plus_paw.png" mode="aspectFit" />
+    </button>
+    <button class="ai-toggle {{aiEnabled ? 'on' : ''}}" bindtap="onToggleAi">
+      <text class="ai-dot"></text>
+      <text>AI识别</text>
+      <text class="ai-state">{{aiEnabled ? '开' : '关'}}</text>
+      <text wx:if="{{aiQuotaLoaded && !aiUnlimited}}" class="ai-quota">{{aiQuotaRemaining}}次</text>
+    </button>
+    <button class="ai-help" bindtap="onOpenAiTip">?</button>
+  </view>
+
+  <view class="quick-bar">
+    <button class="quick-btn" bindtap="onOpenImport" aria-role="button" aria-label="文字导入">
+      <image src="/assets/original/icon_calendar.png" mode="aspectFit" />
+      <text>导入</text>
+    </button>
+    <voice-record-button bind:start="onVoiceStart" bind:processing="onVoiceProcessing" bind:finish="onVoiceFinish" bind:error="onVoiceError" bind:cancel="onVoiceCancel" />
+  </view>
+
+  <bottom-tip show="{{showBottomTip}}" bind:close="onBottomClose" bind:never="onBottomNever" />
+
+  <category-popover show="{{showCategory}}" categories="{{categories}}" selected-id="{{selectedCategoryId}}" bind:close="onCloseCategory" bind:select="onSelectCategory" bind:add="onAddCategory" bind:delete="onDeleteCategory" />
+  <add-event-modal id="addModal" show="{{showAddModal}}" form="{{addForm}}" categories="{{categories}}" backgrounds="{{backgrounds}}" subscription-state="{{reminderSubscriptionState}}" reminder-error="{{reminderError}}" saving="{{savingEvent}}" bind:change="onAddFormChange" bind:cancel="onCloseAdd" bind:confirm="onAddConfirm" bind:easter="onAddEaster" bind:notice="onNotice" />
+  <action-popover show="{{showAction}}" event="{{actionEvent}}" bind:close="onCloseAction" bind:edit="onActionEdit" bind:background="onActionBackground" bind:delete="onActionDelete" />
+  <background-picker show="{{showBackgroundPicker}}" mode="{{backgroundPickerMode}}" backgrounds="{{backgrounds}}" selected-id="{{backgroundPickerMode == 'event' ? actionEvent.backgroundId : pageBackgroundId}}" custom-count="{{customBackgroundCount}}" custom-limit="{{customBackgroundLimit}}" unlimited="{{backgroundUnlimited}}" bind:close="onCloseBackgroundPicker" bind:select="onSelectBackground" bind:delete="onDeleteCustomBackground" bind:import="onImportBackground" />
+  <background-cropper id="backgroundCropper" show="{{showBackgroundCropper}}" src="{{backgroundCropImagePath}}" bind:close="onCloseBackgroundCropper" bind:confirm="onBackgroundCropConfirm" bind:notice="onNotice" />
+  <category-create-dialog show="{{showCategoryCreate}}" bind:close="onCloseCategoryCreate" bind:confirm="onCategoryCreateConfirm" />
+  <voice-result-sheet show="{{showVoiceResult}}" raw-text="{{voiceRawText}}" candidate="{{voiceCandidate}}" bind:close="onVoiceClose" bind:reparse="onVoiceReparse" bind:confirm="onVoiceConfirm" bind:notice="onNotice" />
+  <image-text-import-sheet show="{{showImportSheet}}" raw-text="{{importRawText}}" ai-enabled="{{aiEnabled}}" bind:close="onCloseImport" bind:parsetext="onParseImportText" bind:parseimage="onParseImportImage" />
+  <import-result-list id="importResultList" show="{{showImportResults}}" candidates="{{importCandidates}}" bind:close="onCloseImportResults" bind:confirm="onImportConfirm" bind:notice="onNotice" />
+  <ai-operation-sheet id="aiSheet" show="{{showAiOperations}}" result="{{aiOperationResult}}" events="{{events}}" bind:close="onCloseAiOperations" bind:confirm="onConfirmAiOperations" bind:notice="onNotice" />
+  <easter-egg-pop show="{{showEaster}}" />
+  <confirm-dialog show="{{showConfirm}}" title="{{confirmTitle}}" content="{{confirmContent}}" confirm-text="{{confirmConfirmText}}" cancel-text="{{confirmCancelText}}" bind:cancel="onConfirmCancel" bind:confirm="onConfirmOk" />
+  <view wx:if="{{showAutoReminderNotice}}" class="reminder-notice-layer" bindtap="onCloseAutoReminderNotice">
+    <view class="reminder-notice-card" catchtap="noop">
+      <view class="reminder-notice-icon">
+        <image src="/assets/original/icon_calendar.png" mode="aspectFit" />
+      </view>
+      <view class="reminder-notice-title">自动提醒已准备好</view>
+      <view class="reminder-notice-text">{{autoReminderNoticeText}}</view>
+      <view class="reminder-notice-actions">
+        <button class="notice-btn primary" bindtap="onCloseAutoReminderNotice">知道了</button>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{showAiTip}}" class="ai-tip-layer" bindtap="onCloseAiTip">
+    <view class="ai-tip-card" catchtap="noop">
+      <button class="ai-tip-close" bindtap="onCloseAiTip">×</button>
+      <view class="ai-tip-title">AI识别能做什么</view>
+      <view class="ai-tip-text">开启后，AI会结合今天日期和现有事项，整理新增、修改、删除、置顶和提醒操作，确认后才会执行。</view>
+      <view class="ai-tip-example">例如：删除下周的会议，把周五之后的事项改到下个月，给生日设置提醒。</view>
+      <view wx:if="{{aiQuotaLoaded && !aiUnlimited}}" class="ai-tip-quota">本账号还可使用 {{aiQuotaRemaining}} 次 AI 识别</view>
+    </view>
+  </view>
+  <view wx:if="{{showVoiceBusy}}" class="voice-busy-mask" catchtap="noop" catchtouchstart="noop" catchtouchmove="noop" catchtouchend="noop">
+    <view class="voice-busy-card">
+      <view class="voice-busy-close" catchtap="onVoiceBusyClose" catchtouchstart="onVoiceBusyClose" aria-role="button" aria-label="取消等待">×</view>
+      <view class="voice-busy-paw">
+        <image src="/assets/original/icon_plus_paw.png" mode="aspectFit" />
+      </view>
+      <view class="voice-busy-wave">
+        <view></view>
+        <view></view>
+        <view></view>
+        <view></view>
+      </view>
+      <view class="voice-busy-title">正在整理结果</view>
+      <view class="voice-busy-text">请稍等一下</view>
+    </view>
+  </view>
+  <view wx:if="{{showImageBusy}}" class="image-busy-mask" catchtap="noop" catchtouchstart="noop" catchtouchmove="noop" catchtouchend="noop">
+    <view class="image-busy-card">
+      <view class="image-busy-close" catchtap="onImageBusyClose" catchtouchstart="onImageBusyClose" aria-role="button" aria-label="取消图片识别">×</view>
+      <view class="image-busy-icon">
+        <image src="/assets/original/icon_calendar.png" mode="aspectFit" />
+      </view>
+      <view class="image-busy-title">{{imageBusyText || '正在识别图片'}}</view>
+      <view class="image-busy-text">只提取重要日和提醒内容</view>
+      <view class="image-busy-dots">
+        <view></view>
+        <view></view>
+        <view></view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{showTextBusy}}" class="text-busy-mask" catchtap="noop" catchtouchstart="noop" catchtouchmove="noop" catchtouchend="noop">
+    <view class="text-busy-card">
+      <view class="text-busy-icon">
+        <image src="/assets/original/icon_calendar.png" mode="aspectFit" />
+      </view>
+      <view class="text-busy-title">{{textBusyText || '正在整理文字内容'}}</view>
+      <view class="text-busy-text">AI 只会提取可新增的重要日</view>
+      <view class="text-busy-lines">
+        <view></view><view></view><view></view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{showBackgroundBusy}}" class="background-busy-mask" catchtap="noop" catchtouchstart="noop" catchtouchmove="noop" catchtouchend="noop">
+    <view class="background-busy-card">
+      <view class="background-busy-icon">
+        <image src="/assets/original/icon_paint.png" mode="aspectFit" />
+      </view>
+      <view class="background-busy-title">{{backgroundBusyText || '正在处理背景'}}</view>
+      <view class="background-busy-dots">
+        <view></view>
+        <view></view>
+        <view></view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{showCenterToast}}" class="center-toast {{centerToastType}}">
+    <view wx:if="{{centerToastIcon}}" class="center-toast-icon">{{centerToastIcon}}</view>
+    <view class="center-toast-text">{{centerToastText}}</view>
+  </view>
+</view>

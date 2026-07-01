@@ -1,0 +1,22 @@
+<view wx:if="{{show}}" class="sheet-layer" bindtap="onClose">
+  <view class="import-sheet" style="transform: translateY({{dragOffset}}px);" catchtap="noop">
+    <view class="sheet-drag-zone" catchtouchstart="onDragStart" catchtouchmove="onDragMove" catchtouchend="onDragEnd" catchtouchcancel="onDragEnd">
+      <view class="sheet-handle"></view>
+      <view class="sheet-title">导入事项</view>
+      <view class="sheet-subtitle">文字可多行；图片一次识别一张，当前只会新增记录</view>
+      <view class="ai-import-state {{aiEnabled ? 'on' : ''}}">{{aiEnabled ? 'AI 已开启：文字和图片会智能整理' : 'AI 已关闭：使用本地规则解析'}}</view>
+    </view>
+
+    <button class="image-import-btn" bindtap="onParseImage">
+      <image class="image-import-icon" src="/assets/original/icon_calendar.png" mode="aspectFit" />
+      <text>识别一张图片</text>
+    </button>
+
+    <textarea class="text-area" value="{{localText}}" maxlength="800" placeholder="可以粘贴多行文字，例如：明天交作业; 下周五团队会议; 8月1日朋友生日" bindinput="onTextInput" />
+
+    <view class="sheet-actions">
+      <button class="btn ghost" bindtap="onClose">取消</button>
+      <button class="btn primary" bindtap="onParseText">解析事项</button>
+    </view>
+  </view>
+</view>
